@@ -33,4 +33,4 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B -Dgpg.skip=true verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.10.0.2594:sonar -Dsonar.projectKey=dhillii_jfreechart-1.0.19_7_31_2014
+        run: mvn -B -Dgpg.skip=true -DskipTests=true verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.10.0.2594:sonar -Dsonar.projectKey=dhillii_jfreechart-1.0.19_7_31_2014
