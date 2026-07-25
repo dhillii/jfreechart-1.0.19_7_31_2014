@@ -242,6 +242,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.source.level>1.6</project.source.level>
         <project.target.level>1.6</project.target.level>
+        <sonar.organization>dhillii</sonar.organization>
     </properties>
 
   <profiles>
