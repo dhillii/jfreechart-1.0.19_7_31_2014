@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Set up JDK 8
+      - name: Set up JDK 8 for build
         uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
         with:
           java-version: 8
@@ -30,8 +30,17 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Build and analyze
+      - name: Build (Java 8)
+        run: mvn -B -Dgpg.skip=true -DskipTests=true verify
+
+      - name: Set up JDK 17 for SonarCloud scan
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        with:
+          java-version: 17
+          distribution: 'zulu'
+
+      - name: SonarCloud scan (Java 17)
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn -B -Dgpg.skip=true -DskipTests=true verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.10.0.2594:sonar -Dsonar.projectKey=dhillii_jfreechart-1.0.19_7_31_2014 -Dsonar.organization=dhillii -Dsonar.host.url=https://sonarcloud.io
+        run: mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=dhillii_jfreechart-1.0.19_7_31_2014 -Dsonar.organization=dhillii -Dsonar.host.url=https://sonarcloud.io
